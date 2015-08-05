@@ -15,7 +15,20 @@ class Workspace.Views.Plans.ShowView extends Backbone.View
       i.boxes.each (box) =>
         $form = $('<form>');
         $form.html(@box_template(box.toJSON()))
-        $form.backboneLink(box)
+        # backbone link does not work well for checboxes
+        #$form.backboneLink(box)
+        
+        # we do our own binding here
+        # we bind from UI object to model 
+        $form.find("[name=checked]").on "change", (evt) =>
+          new_val = $(evt.target).prop("checked")
+          if box.get("checked") != new_val
+            box.set("checked", new_val)
+        
+        # when a checkbox value is changed, trigger change event for the entire plan
+        box.on "change:checked", (i) =>
+          @model.trigger("change")
+
         this.$("#boxes-table").append($form)
         
     return this

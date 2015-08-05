@@ -7,12 +7,15 @@ class Workspace.Models.Plan extends Backbone.Model
     @on("change", @say_hello)
 
   say_hello: ->
-    console.log("hi")
+    console.log( @reconstruct_content() )
     
   defaults:
     history: null
     content: "# Problem 1\nDifferential is broad\n[] followup test\n[] call consultant\n\n# Problem 2\nDifferential is broader\n[] call another consultant\n\n# Problem 3\ndifferential is broadest"
 
+  reconstruct_content: ->
+    @leading_rows + "\n" + @problems.map( (i) -> i.toText() ).join("\n\n")
+    
   parse_content: ->
     headings = @get("content").match(/[\^|\n]#.*/g)
 
@@ -24,7 +27,7 @@ class Workspace.Models.Plan extends Backbone.Model
     # update the subcollection problems
     @problems.reset( $.map problems, (i) =>
       # remove leading endlines and split
-      lines = i.replace(/^\n+/, "").split(/\n/)
+      lines = i.trim().split(/\n+/)
       
       title_line = headings.shift().replace(/[\^|\n]#/, "").trim() || "Problem"
 
@@ -33,16 +36,18 @@ class Workspace.Models.Plan extends Backbone.Model
         
       $.map lines, (i) ->
         if i.match(/^\[.?\]/) == null
-          text_lines.push i
+          text_lines.push i.trim()
         else
-          box_lines.push i    
-          
-      {title: title_line, content: text_lines.join("<br />"), boxes: box_lines}
+          box_lines.push i.trim()
+      
+      # .concat does not alter the original array
+      all_lines = text_lines.concat( $.map(box_lines, (i) -> "- "+i.replace(/^\[.?\]/,"")) )
+      {title: title_line, content: all_lines.join("<br />"), text_lines: text_lines, box_lines: box_lines}
     )  
 
     @problems.each (i) ->
-      i.boxes.reset( $.map i.get("boxes"), (j) ->
-        title: j.replace(/^\[.?\]/, "")
+      i.boxes.reset( $.map i.get("box_lines"), (j) ->
+        title: j.replace(/^\[.?\]/, "").trim()
         checked: j.match(/^\[\]/) == null
       )
       
