@@ -11,9 +11,19 @@ class Workspace.Routers.PlansRouter extends Backbone.Router
     ".*"        : "index"
 
   newPlan: ->
-    @view = new Workspace.Views.Plans.NewView(collection: @plans)
-    $("#plans").html(@view.render().el)
+    # modified this to create and then go to show    
 
+    plan = new @plans.model()
+
+    @plans.create(plan.toJSON(),
+      success: (plan) =>
+        @model = plan
+        window.location.hash = "/#{@model.id}"
+
+      error: (plan, jqXHR) =>
+        @model.set({errors: $.parseJSON(jqXHR.responseText)})
+    )
+    
   index: ->
     @view = new Workspace.Views.Plans.IndexView(collection: @plans)
     $("#plans").html(@view.render().el)

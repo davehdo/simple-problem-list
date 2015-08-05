@@ -3,9 +3,7 @@ class Workspace.Models.Plan extends Backbone.Model
   
   initialize: ->
     @problems = new Workspace.Collections.ProblemsCollection()
-
-  events:
-    "changed" : "say_hello"
+    @on("change", @say_hello)
 
   say_hello: ->
     console.log("hi")
