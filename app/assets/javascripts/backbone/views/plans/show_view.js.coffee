@@ -5,13 +5,6 @@ class Workspace.Views.Plans.ShowView extends Backbone.View
   problem_template: JST["backbone/templates/problems/problem"]
   box_template: JST["backbone/templates/boxes/box"]
   
-  initialize: ->
-    # bind to checkbox editing
-    #@model.on("change", @reconstruct_content)
-
-  #reconstruct_content: =>
-    #@model.reconstruct_content_and_save()
-
   render: ->
     @$el.html(@template(@model.toJSON() ))
     @model.parse_content()
@@ -34,7 +27,6 @@ class Workspace.Views.Plans.ShowView extends Backbone.View
         
         # when a checkbox value is changed, trigger change event for the entire plan
         box.on "change:checked", (i) =>
-          #@model.trigger("change")
           @model.reconstruct_content_and_save()
         this.$("#boxes-table").append($form)
         
