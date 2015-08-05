@@ -10,7 +10,7 @@ class Workspace.Models.Plan extends Backbone.Model
     
   defaults:
     history: null
-    content: "# Problem 1\nDifferential is broad\n[] followup test\n[] call consultant\n\n# Problem 2 Differential is broader\n[] call another consultant\n# Problem 3"
+    content: "# Problem 1\nDifferential is broad\n[] followup test\n[] call consultant\n\n# Problem 2\nDifferential is broader\n[] call another consultant\n\n# Problem 3\ndifferential is broadest"
 
   parse_content: ->
     problems = @get("content").split(/\n#+/)
