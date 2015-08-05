@@ -1,20 +1,42 @@
-<h1>Edit plan</h1>
+<h1>Plan</h1>
 
-<form id="edit-plan" name="plan">
-  <div class="field">
-    <label for="history"> history:</label>
-    <input type="text" name="history" id="history" value="<%= history %>" >
-  </div>
+<div class="row">
+  <div class="col-sm-8">
+    <h3>Problem list</h3>
+      <form id="edit-plan" name="plan">
+    
 
-  <div class="field">
-    <label for="content"> content:</label>
-    <input type="text" name="content" id="content" value="<%= content %>" >
-  </div>
+        <textarea rows="16" class="form-control" name="content" id="content">
+    <%= content %></textarea>
+    
+      <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-default" />
+      </div>
+    </form>
+    
+  </div>  
+  
+  <div class="col-sm-4">
+    <h3>Hint</h3>
+    <pre>
+# Problem 1
+Differential unclear
+- information
+[] uncompleted task
+[x] completed task
 
-  <div class="actions">
-    <input type="submit" value="Update Plan" />
-  </div>
+# Problem 2
 
-</form>
+# Problem 3
+# Problem 4
+    </pre>
+
+  </div>  
+</div>
+
+
+
+
+
 
 <a href="#/index">Back</a>

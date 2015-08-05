@@ -3,6 +3,7 @@ Workspace.Views.Plans ||= {}
 class Workspace.Views.Plans.EditView extends Backbone.View
   template: JST["backbone/templates/plans/edit"]
 
+  
   events:
     "submit #edit-plan": "update"
 
@@ -18,7 +19,8 @@ class Workspace.Views.Plans.EditView extends Backbone.View
 
   render: ->
     @$el.html(@template(@model.toJSON() ))
-
     this.$("form").backboneLink(@model)
+
+        
 
     return this
