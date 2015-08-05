@@ -1,26 +1,19 @@
-<%= form_for(@plan) do |f| %>
-  <% if @plan.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@plan.errors.count, "error") %> prohibited this plan from being saved:</h2>
+<h1>New plan</h1>
 
-      <ul>
-      <% @plan.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+<form id="new-plan" name="plan">
 
   <div class="form-group">
-    <%= f.label :history %>
-    <%= f.text_area :history, class: "form-control" %>
+    <label for="plan_history">History</label>
+    <textarea rows="10" class="form-control" name="history" id="history"><%= history %>
+</textarea>
   </div>
   <div class="form-group">
-    <%= f.label :content %>
-    <%= f.text_area :content, rows: 10, class: "form-control" %>
+    <label for="plan_content">Content</label>
+    <textarea rows="10" class="form-control" name="content" id="content">
+<%= content %></textarea>
   </div>
   <div class="form-group">
-    <%= f.submit "Save", class: "btn btn-default" %>
+    <input type="submit" value="Save" class="btn btn-default" />
   </div>
   
   <div class="row">
@@ -61,4 +54,6 @@
   </div><!-- /row -->
 
 
-<% end %>
+</form>
+
+<a href="#/index">Back</a>
