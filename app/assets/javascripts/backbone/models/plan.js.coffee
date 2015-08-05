@@ -4,18 +4,21 @@ class Workspace.Models.Plan extends Backbone.Model
   initialize: ->
     @leading_rows = ""
     @problems = new Workspace.Collections.ProblemsCollection()
-    @on("change", @say_hello)
 
-  say_hello: ->
-    console.log( @reconstruct_content() )
-    
   defaults:
     history: null
     content: "# Problem 1\nDifferential is broad\n[] followup test\n[] call consultant\n\n# Problem 2\nDifferential is broader\n[] call another consultant\n\n# Problem 3\ndifferential is broadest"
 
-  reconstruct_content: ->
+  reconstructed_content: ->
     @leading_rows + "\n" + @problems.map( (i) -> i.toText() ).join("\n\n")
-    
+  
+  reconstruct_content_and_save: ->
+    @set "content", @reconstructed_content()
+    console.log("reconstructing")
+    if @hasChanged("content")
+      @save()
+      console.log("saved")
+
   parse_content: ->
     headings = @get("content").match(/[\^|\n]#.*/g)
 
@@ -35,7 +38,9 @@ class Workspace.Models.Plan extends Backbone.Model
       text_lines = []
         
       $.map lines, (i) ->
-        if i.match(/^\[.?\]/) == null
+        if i.trim() == ""
+          #
+        else if i.match(/^\[.?\]/) == null
           text_lines.push i.trim()
         else
           box_lines.push i.trim()

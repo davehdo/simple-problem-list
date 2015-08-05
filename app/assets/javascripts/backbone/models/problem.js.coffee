@@ -13,6 +13,7 @@ class Workspace.Models.Problem extends Backbone.Model
   toText: ->
     # $.merge alters the original array
     lines = ["# #{@get("title")}"]
+
     $.merge(lines, @get("text_lines") || [])
     $.merge(lines, @boxes.map((i) -> i.toText()))
     lines.join("\n")
