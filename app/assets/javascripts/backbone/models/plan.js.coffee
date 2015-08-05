@@ -20,9 +20,10 @@ class Workspace.Models.Plan extends Backbone.Model
       console.log("saved")
 
   parse_content: ->
-    headings = @get("content").match(/[\^|\n]#.*/g)
+    # find the hashes that are immediately after an endline or start of string
+    headings = @get("content").match(/\n#.*|^#.*/g)
 
-    problems = @get("content").split(/[\^|\n]#.*/g)
+    problems = @get("content").split(/\n#.*|^#.*/g)
     
     # due to split, there is always one extra problem, which we keep as leading row
     @leading_rows=problems.shift()
