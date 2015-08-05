@@ -2,6 +2,7 @@ class Workspace.Models.Plan extends Backbone.Model
   paramRoot: 'plan'
   
   initialize: ->
+    @leading_rows = ""
     @problems = new Workspace.Collections.ProblemsCollection()
     @on("change", @say_hello)
 
@@ -13,16 +14,19 @@ class Workspace.Models.Plan extends Backbone.Model
     content: "# Problem 1\nDifferential is broad\n[] followup test\n[] call consultant\n\n# Problem 2\nDifferential is broader\n[] call another consultant\n\n# Problem 3\ndifferential is broadest"
 
   parse_content: ->
-    problems = @get("content").split(/\n#+/)
+    headings = @get("content").match(/[\^|\n]#.*/g)
+
+    problems = @get("content").split(/[\^|\n]#.*/g)
     
-    # only keep the first problem if it starts with a hash
-    if (problems[0] != undefined) and (problems[0].match(/^#/) == null)
-      problems.shift()
+    # due to split, there is always one extra problem, which we keep as leading row
+    @leading_rows=problems.shift()
     
     # update the subcollection problems
-    @problems.reset( $.map problems, (i) ->
-      lines = i.split(/\n/)
-      title_line = lines.shift().replace(/^#/, "")
+    @problems.reset( $.map problems, (i) =>
+      # remove leading endlines and split
+      lines = i.replace(/^\n+/, "").split(/\n/)
+      
+      title_line = headings.shift().replace(/[\^|\n]#/, "").trim() || "Problem"
 
       box_lines = []
       text_lines = []
